@@ -1,5 +1,5 @@
 import express from "express";
-import { addDepartment ,getDepartments,addCourse,getCourses,addSemAndSection,addSubject,addTeacher,getTeacherAndSubjectForSection,getSections,addTeacherAndSubject} from "../../controllers/AdminControllers/AddDetails/AddDetails.js";
+import { addDepartment ,getDepartments,addCourse,getCourses,addSemAndSection,addSubject,addTeacher,getTeacherAndSubjectForSection,getSections,addTeacherAndSubject } from "../../controllers/AdminControllers/AddDetails/AddDetails.js";
 
 const adminRouter=express.Router();
 
@@ -15,6 +15,7 @@ adminRouter.post('/addSubject',addSubject);
 adminRouter.post('/addTeacher',addTeacher);
 adminRouter.post('/getTeacherAndSubjectForSection',getTeacherAndSubjectForSection);
 adminRouter.post('/addTeacherAndSubject',addTeacherAndSubject); 
+ 
  
 
 export default adminRouter;

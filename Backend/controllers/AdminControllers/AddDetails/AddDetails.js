@@ -11,6 +11,13 @@ import {
 import teacherModel from "../../../models/AdminModels/TeacherEnteryModel.js";
 import sectionModel from "../../../models/AdminModels/AddSemAndSectionModel.js";
 import teacherAndSubjectModel from "../../../models/AdminModels/TeacherAndSubjectModel.js";
+import userModel from "../../../models/userModel/userModel.js";
+import jwt from "jsonwebtoken";
+
+const createToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET);
+};
+
 
 
 const addTeacherAndSubject = async (req, res) => {
@@ -407,4 +414,5 @@ export {
   getTeacherAndSubjectForSection,
   getSections,
   addTeacherAndSubject,
+   
 };

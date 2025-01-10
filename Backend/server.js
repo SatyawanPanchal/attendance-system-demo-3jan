@@ -5,6 +5,7 @@ import adminRouter from "./routes/AdminRoutes/adminRoutes.js";
 import principalRouter from "./routes/PrincipalRoutes/PrincipalRoutes.js";
 import { connectDB } from "./config/ConnectDB.js";
 import academicRouter from "./routes/AcademicRoutes/AcademicsRoutes.js";
+import userRouters from "./routes/UserRouters/UserRouter.js";
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,7 @@ connectDB();
 app.use('/api/admin',adminRouter);
 app.use('/api/principal',principalRouter);
 app.use('/api/academics',academicRouter);
+app.use('/api/user',userRouters);
 
 
 app.listen(port, () => {
