@@ -18,7 +18,106 @@ const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 
+const approveRights = async (req, res) => {
+  const { emailId,roles } = req.body;
+  const userWithUpdatedRoles = req.body;
+   
+  // we want to return from here if user is already a superuser
 
+  try {
+    const userFromDatabase=await userModel.findOne({emailId:emailId});
+ if('user roles',userFromDatabase.roles.includes('SuperUser'))
+ {
+    res.json({
+      success:true,
+      message:`${userFromDatabase.userName} is already a Super User`
+
+    })
+ }  
+
+  } catch (error) {
+    res.json({
+      success:false,
+      message:`no data updated`,
+    })
+  }
+  
+
+
+
+
+
+
+
+  try {
+    const updatedUser = await userModel.findOneAndUpdate(
+      { emailId: emailId },
+      { $set: userWithUpdatedRoles },
+      { new: true, runValidators: true }
+    );
+
+    if (updatedUser) {
+      console.log("updated user ==", updatedUser);
+
+      res.json({
+        success: true,
+        message: `${userWithUpdatedRoles.userName} is updated with rights ${userWithUpdatedRoles.roles}`,
+      });
+    } else {
+      console.log("no user is updated");
+    }
+  } catch (error) {
+    console.log('error updating user ::::',error.message);
+    
+  }
+};
+
+const updateApproval = async (req, res) => {
+  const { emailId } = req.body;
+
+
+  console.log("hi i am in updateApproval with data", emailId);
+  try {
+    const updatedUser = await userModel.findOneAndUpdate(
+      { emailId }, // Filter to find the user by emailId
+      { approved: true }, // Update the approved field to true
+      { new: true } // Return the updated document
+    );
+    if (updatedUser) {
+      const users = await userModel.find();
+      if (users) {
+        res.json({
+          success: true,
+          message: `${updatedUser.userName} is approved`,
+          users: users,
+        });
+      }
+    }
+
+    console.log("updateuser-------->⛱️⛱️⛱️", updatedUser);
+  } catch (error) {
+    res.json({
+      success: false,
+      message: `user is not approved ${error.message}`,
+    });
+  }
+};
+
+const getUsers = async (req, res) => {
+  try {
+    const users = await userModel.find();
+    res.json({
+      success: true,
+      message: `fetched successfully`,
+      users: users,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: `${error.mesage} is the error in fetching users`,
+    });
+  }
+};
 
 const addTeacherAndSubject = async (req, res) => {
   console.log("we are in addTeacherAndSubject with data", req.body);
@@ -414,5 +513,7 @@ export {
   getTeacherAndSubjectForSection,
   getSections,
   addTeacherAndSubject,
-   
+  getUsers,
+  updateApproval,
+  approveRights,
 };

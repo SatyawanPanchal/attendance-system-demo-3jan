@@ -1,0 +1,88 @@
+/* Container for the attendance book */
+.attendance-book-container-main {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Dropdown styling */
+select {
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  width: 200px;
+  background-color: #f9f9f9;
+}
+
+/* Table container */
+.table-div {
+  overflow-x: auto; /* Makes the table scrollable horizontally on small screens */
+  margin-top: 20px;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+thead {
+  background-color: #007bff; /* Header background color */
+  color: beige; /* Header text color */
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+/* Table row hover effect */
+tr:hover {
+  background-color: #11230c;
+}
+
+/* Alternate row colors for better readability */
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+/* Table header cells */
+thead tr td {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Adjust text in table cells */
+td {
+  font-size: 14px;
+}
+.absent {
+  background-color: #af4c5b;
+  color: white;
+  font-weight: 600;
+}
+.present {
+  background-color: #4caf50;
+  color: rgb(13, 13, 4);
+  font-weight: 700;
+}
+
+/* Responsive adjustments for smaller screens */
+@media screen and (max-width: 768px) {
+  table {
+    font-size: 12px;
+  }
+
+  select {
+    width: 100%;
+  }
+}

@@ -5,15 +5,17 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/AuthContext/AuthContext";
 import "./LoginRegister.css";
 import { CommonContexts } from "../Context/AttendanceContexts/Attendance_Contexts";
-
+import { getOtp, sendOtp, verifyOtp } from "./otpSendAndVerify";
 const server_url = import.meta.env.VITE_SERVER_URL;
 // eslint-disable-next-line react/prop-types
 const LoginRegister = ({ setLoginStatus }) => {
+  let generatedOtp = getOtp();
   const { setLoginDetails } = useContext(AuthContext);
   const { departmentNames } = useContext(CommonContexts);
-  const { userName, setUserName } = useState("");
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(true);
   const [localIds, setLocalIds] = useState([]);
+
   const [userData, setUserData] = useState({
     departmentName: "",
     loginAs: "",
@@ -22,31 +24,43 @@ const LoginRegister = ({ setLoginStatus }) => {
     emailId: "",
     password: "",
     reEnterPassword: "",
+    OtpRecieved: "",
   });
 
-  const loginRoles = ["Admin", "Teacher", "Principal", "Parent", "Student"];
+  const loginRoles = [
+    "SuperUser",
+    "Admin",
+    "AcademicCoordinator",
+    "Teacher",
+    "Principal",
+    "Parent",
+    "Student",
+  ];
 
   const handleSubmitButtonClickForLogin = async () => {
-    alert("i am going for login");
-    // Validation
-    //const { userName, emailId, password, loginAs } = userData;
-    // if (!userName || !emailId || !password || !loginAs) {
-    //   alert("Please fill in all the fields before submitting.");
-    //   return;
-    // }
     try {
       const response = await axios.post(
         server_url + "/api/user/loginUser",
         userData
       );
-      if (response.data.success) {
-        const { userName, role, success } = response.data;
+      console.log("login data ⛱️", response.data.data);
+      alert(response.data.message);
+      console.log("token", response.data.token);
+
+      alert(response.data.token);
+      if (response.data.data.success) {
+        console.log("we are logged in ");
+
+        const { userName, role, success } = response.data.data;
         setLoginDetails({
           userName: userName,
           userRole: role,
           success: success,
+          token: response.data.token,
         });
-        console.log("data submitted successfully" + response.data.userName);
+        alert(
+          `${response.data.data.userName} logged in as ${response.data.data.role}  successfully`
+        );
       } else {
         alert(response.data.message);
       }
@@ -55,14 +69,55 @@ const LoginRegister = ({ setLoginStatus }) => {
     }
   };
   const handleSubmitButtonClickForRegistration = async () => {
-    alert("i am going for registration");
+    let otpMatched = false;
+    // check for the otp is matched or not
+
+    if (userData.OtpRecieved) {
+      try {
+        const response = await axios.post(
+          `${server_url}/api/user/verifyOtp`,
+          userData
+        );
+        if (response.data.success) {
+          otpMatched = true;
+          console.log("otp matched");
+        } else {
+          alert(response.data.message);
+          return;
+        }
+      } catch (error) {
+        console.log("", error.message);
+      }
+    }
+    // check for password entered and re-entered matched or not
+
+    if (userData.password.trim().length < 4) {
+      alert("password length is less than 4");
+      return;
+    }
+
+    if (userData.password !== userData.reEnterPassword) {
+      alert("passwords not matched");
+      return;
+    }
+
+    if (
+      !userData.departmentName ||
+      !userData.localId ||
+      !userData.userName ||
+      !userData.emailId ||
+      !userData.password
+    ) {
+      alert("please fill all the fields");
+      return;
+    }
 
     try {
       const response = await axios.post(
         server_url + "/api/user/registerUser",
         userData
       );
-      console.log("resopnse", response.data);
+      alert(response.data.message);
     } catch (error) {
       console.log("error", error.message);
     }
@@ -95,8 +150,6 @@ const LoginRegister = ({ setLoginStatus }) => {
         );
         if (response.data.success) {
           setLocalIds(response.data.data);
-        } else {
-          alert(response.data.message);
         }
       } catch (error) {
         alert(error.message);
@@ -114,15 +167,24 @@ const LoginRegister = ({ setLoginStatus }) => {
       try {
         const response = await axios.post(
           `${server_url}/api/user/getNameFromId`,
-          userData.localId
+          userData
         );
-        console.log("response of fetching the name ", response.data);
+        console.log(
+          "response of fetching the name ",
+          response.data.data.teacherName
+        );
+        setUserName(response.data.data.teacherName);
+        setUserData((prev) => ({
+          ...prev,
+          userName: response.data.data.teacherName,
+        }));
       } catch (error) {
         console.log("error in fetching the name =", error.message);
       }
     };
 
     const userName = fetchUserName();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData.localId]);
 
   return (
@@ -130,47 +192,51 @@ const LoginRegister = ({ setLoginStatus }) => {
       <div className="main_container">
         <form onSubmit={handleSubmit}>
           {/* employee id */}
-          <div className="elements">
-            <label htmlFor="">
-              Choose <b>Department</b>
-            </label>
-            <select
-              name="departmentName"
-              value={userData.departmentName}
-              onChange={handleChange}
-            >
-              <option value="">Select Department Below</option>
-              {departmentNames &&
-                departmentNames.map((department, index) => {
-                  return (
-                    <option key={index} value={department}>
-                      {department}
-                    </option>
-                  );
-                })}
-            </select>
-          </div>
+          {!isLoggingIn && (
+            <div className="elements">
+              <label htmlFor="">
+                Choose <b>Department</b>
+              </label>
+              <select
+                name="departmentName"
+                value={userData.departmentName}
+                onChange={handleChange}
+              >
+                <option value="">Select Department Below</option>
+                {departmentNames &&
+                  departmentNames.map((department, index) => {
+                    return (
+                      <option key={index} value={department}>
+                        {department}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
+          )}
           {/* Entering employee ids */}
-          <div className="elements">
-            <label htmlFor="">
-              Choose <b>employee id</b>
-            </label>
-            <select
-              name="localId"
-              value={userData.localId}
-              onChange={handleChange}
-            >
-              <option value="">Select Local Id Below</option>
-              {localIds &&
-                localIds.map((localId, index) => {
-                  return (
-                    <option key={index} value={localId.teachersLocalId}>
-                      {localId.teachersLocalId}
-                    </option>
-                  );
-                })}
-            </select>
-          </div>
+          {!isLoggingIn && (
+            <div className="elements">
+              <label htmlFor="">
+                Choose <b>employee id</b>
+              </label>
+              <select
+                name="localId"
+                value={userData.localId}
+                onChange={handleChange}
+              >
+                <option value="">Select Local Id Below</option>
+                {localIds &&
+                  localIds.map((localId, index) => {
+                    return (
+                      <option key={index} value={localId.teachersLocalId}>
+                        {localId.teachersLocalId}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
+          )}
           {/* login as */}
           {isLoggingIn && (
             <div className="elements">
@@ -203,7 +269,7 @@ const LoginRegister = ({ setLoginStatus }) => {
               <input
                 type="text"
                 name="userName"
-                value={userData.userName}
+                value={userName}
                 onChange={handleChange}
               />
             </div>
@@ -218,8 +284,21 @@ const LoginRegister = ({ setLoginStatus }) => {
               name="emailId"
               value={userData.emailId}
               onChange={handleChange}
+              required
             />
           </div>
+          {!isLoggingIn && (
+            <div className="elements">
+              <button
+                className="submitButton"
+                onClick={() =>
+                  sendOtp({ otp: generatedOtp, email: userData.emailId })
+                }
+              >
+                Send OTP
+              </button>
+            </div>
+          )}
           {/* Enter the password */}
           <div className="elements">
             <label htmlFor="">
@@ -246,6 +325,21 @@ const LoginRegister = ({ setLoginStatus }) => {
               />
             </div>
           )}
+          {/* Enter the password */}
+          {!isLoggingIn && (
+            <div className="elements">
+              <label htmlFor="">
+                Enter <b>OTP</b>{" "}
+              </label>
+              <input
+                type="text"
+                name="OtpRecieved"
+                value={userData.OtpRecieved}
+                onChange={handleChange}
+              />
+            </div>
+          )}
+          {/*  re-enter the password */}
           {/* choose for login and registration */}
           {!isLoggingIn ? (
             <div className="element">

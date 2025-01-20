@@ -1,11 +1,15 @@
 import express from 'express'
-import {loginUser,registerUser,getLocalIds} from '../../controllers/UserControllers/UserControllers.js'
+import {loginUser,registerUser,getLocalIds,getNameFromId,sendOtp,verifyOtp} from '../../controllers/UserControllers/UserControllers.js'
 
 const userRouters=express.Router();
 
 userRouters.post('/loginUser',loginUser);
 userRouters.post('/registerUser',registerUser);
 userRouters.post('/getLocalIds',getLocalIds);
+userRouters.post('/getNameFromId',getNameFromId);
+userRouters.post('/sendOtp',sendOtp);
+userRouters.post('/verifyOtp',verifyOtp);
+
 
 export default userRouters;
 
