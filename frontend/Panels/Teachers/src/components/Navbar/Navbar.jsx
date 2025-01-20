@@ -1,29 +1,23 @@
 import './Navbar.css'
-import {Link} from 'react-router-dom'
+import { Link, useLocation } from "react-router-dom";
 const Navbar = () => {
-  
-  
-  
-  return (
-    <div className="navbar-div">
-    <ul className="navbar-ul">
+  const location = useLocation();
 
-        <Link to={'/'}>
-        teachers Home</Link>
-        <Link to={'/markAttendance'}>Mark Attendance</Link>
-        <Link to={'/classwise'}  >Classwise Analysis</Link>
-        <Link to={'/studentWise'}>Student Anaysis </Link>
-        <Link to={'/teachersRegister'} >Teachers Register</Link>
-        <Link to={'/logout'}>Log-Out</Link>
-        
-        <li>Contact Us</li>
-    </ul>
-      
+
+  return (
+    <div className="submenu">
+      <ul className="navbar-ul">
+
+        <li className={location.pathname === "/" ? "active" : ""}> <Link to={'/'}>Teachers Home</Link></li>
+        <li className={location.pathname === "/markAttendance" ? "active" : ""}> <Link to={'/markAttendance'}>Mark Attendance</Link></li>
+        <li className={location.pathname === "/classwise" ? "active" : ""}> <Link to={'/classwise'}  >Classwise Analysis</Link></li>
+        <li className={location.pathname === "/studentWise" ? "active" : ""}> <Link to={'/studentWise'}>Student Anaysis </Link></li>
+        <li className={location.pathname === "/teachersRegister" ? "active" : ""}> <Link to={'/teachersRegister'} >Teachers Register</Link></li>
+        <li className={location.pathname === "/logout" ? "active" : ""}> <Link to={'/logout'}>Log-Out</Link></li>
+      </ul>
+
     </div>
   )
 }
 
 export default Navbar;
-
-
-

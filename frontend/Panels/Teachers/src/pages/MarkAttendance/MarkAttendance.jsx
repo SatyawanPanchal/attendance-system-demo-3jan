@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
  
 import { toast } from "react-toastify";
-
+import './MarkAttendance.css'
 import {
     classPreK,
   classKS1,
@@ -138,7 +138,7 @@ return (
     <>
     <Navbar/>
       <div className="home-div">
-        <form className="form" action="">
+        <form className="attendance-form" action="">
           <select onChange={handleChage} name="class" id="">
             <option value="">Select class</option>
             <option value="PreK">PRE-K</option>
@@ -214,7 +214,7 @@ return (
           </button>
         </div>
 
-        <div className="summery-and-graph-div">
+        <div className="summary-and-graph-div">
           <div className="attendace-status-div">
             <h2>
               Total Students in class ={" "}

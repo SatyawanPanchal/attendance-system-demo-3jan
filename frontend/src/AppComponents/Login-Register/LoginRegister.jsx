@@ -290,7 +290,7 @@ const LoginRegister = ({ setLoginStatus }) => {
           {!isLoggingIn && (
             <div className="elements">
               <button
-                className="submitButton"
+                className="sendOtpButton"
                 onClick={() =>
                   sendOtp({ otp: generatedOtp, email: userData.emailId })
                 }
@@ -369,7 +369,7 @@ const LoginRegister = ({ setLoginStatus }) => {
           )}
           {isLoggingIn ? (
             <button
-              className="submitButton"
+              className="SubmitButton"
               type="submit"
               onClick={() => handleSubmitButtonClickForLogin()}
             >
@@ -377,7 +377,7 @@ const LoginRegister = ({ setLoginStatus }) => {
             </button>
           ) : (
             <button
-              className="submitButton"
+              className="SubmitButton"
               type="submit"
               onClick={() => handleSubmitButtonClickForRegistration()}
             >

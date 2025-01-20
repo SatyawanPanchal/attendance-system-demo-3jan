@@ -1,0 +1,91 @@
+.attendance-form {
+    display: flex;
+}
+
+.attendance-form input {
+    width: 190px;
+    padding: 6px;
+}
+
+.present-button {
+    padding: 8px;
+    background-color: #40ba40;
+    border: none;
+    color: #ffd;
+    border-radius: 4px;
+    font-size: 18px;
+}
+
+.absent-button {
+    padding: 8px;
+    background-color: #ea6060;
+    border: none;
+    color: #ffd;
+    border-radius: 4px;
+    font-size: 18px;
+}
+
+.submit-div {
+    margin: 12px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.student-info-div p {
+    font-family: "SUSE";
+    margin: 10px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.submit-button {
+    background-color: #d1f2c8;
+    color: #000;
+    font-weight: 500;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: cursive;
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.summary-and-graph-div {
+    font-family: "SUSE";
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    gap: 20px;
+}
+
+.attendace-status-div {
+    background: #e5f5e19b;
+    padding: 20px;
+}
+
+.selections-div {
+    display: flex;
+    align-items: center;
+}
+
+.selections-div select,
+.selections-div input {
+    display: flex;
+    padding: 5px;
+}
+
+.date-div {
+    display: flex;
+    align-items: center;
+}

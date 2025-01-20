@@ -1,19 +1,48 @@
-.student-wise-main-container{
-   
+.student-wise-main-container {
+
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
     margin-top: 2rem;
-    
+
 }
-select , button{
+
+select,
+button {
     font-size: 1rem;
 }
 
-.show-graph{
+.show-graph {
     display: flex;
     justify-content: center;
     margin-top: 2rem;
 }
- 
+
+.find-student-div button {
+    background-color: #d1f2c8;
+    color: #000;
+    font-weight: 500;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: cursive;
+}
+
+.find-student-div button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.find-student-div button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.student-graph {
+    display: flex;
+    padding: 10px;
+}

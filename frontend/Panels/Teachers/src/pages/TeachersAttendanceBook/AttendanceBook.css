@@ -7,7 +7,6 @@
 /* Dropdown styling */
 select {
   padding: 10px;
-  margin-bottom: 20px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -18,7 +17,7 @@ select {
 
 /* Table container */
 .table-div {
-  overflow-x: auto; /* Makes the table scrollable horizontally on small screens */
+  overflow-x: auto;
   margin-top: 20px;
 }
 
@@ -27,26 +26,31 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
+  font-family: "SUSE";
 }
 
+th,
 thead {
-  background-color: #007bff; /* Header background color */
-  color: beige; /* Header text color */
+  background-color: #d8e4d4;
+  padding: 10px;
+  text-align: left;
 }
-
+th:hover, thead:hover{
+  background-color: #d8e4d496;
+}
 th,
 td {
   padding: 12px 15px;
   text-align: center;
-  border: 1px solid #ddd;
+  border: 1px solid #a2a0a04d;
+  font-size: 14px;
+
 }
 
-/* Table row hover effect */
 tr:hover {
-  background-color: #11230c;
+  background-color: #e0fbd7;
 }
 
-/* Alternate row colors for better readability */
 tbody tr:nth-child(odd) {
   background-color: #f9f9f9;
 }
@@ -55,21 +59,17 @@ tbody tr:nth-child(even) {
   background-color: #ffffff;
 }
 
-/* Table header cells */
 thead tr td {
   font-weight: bold;
   font-size: 16px;
 }
 
-/* Adjust text in table cells */
-td {
-  font-size: 14px;
-}
 .absent {
   background-color: #af4c5b;
   color: white;
   font-weight: 600;
 }
+
 .present {
   background-color: #4caf50;
   color: rgb(13, 13, 4);

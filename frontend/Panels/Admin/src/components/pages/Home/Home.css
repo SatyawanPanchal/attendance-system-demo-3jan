@@ -1,11 +1,12 @@
-.tab-Buttons{
+.tab-Buttons {
     display: flex;
     justify-content: center;
     gap: 2rem;
     margin: 0 auto;
-     
+
 }
-.tab_container{
+
+.tab_container {
     background-color: red;
     display: flex;
     margin: 0 auto;
@@ -13,24 +14,46 @@
     justify-content: center;
 }
 
-.tabButton{
-    
-    padding: 2px;
+.tabButton {
+    background-color: #1a6a21;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.approve-user-div{
+.tabButton:hover {
+    transform: translateY(-2px);
+    background-color: #199b24;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.tabButton:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+.activatedTable{
+    font-family: cursive;
+    font-style: 20px;
+}
+.approve-user-div {
     display: flex;
     flex-direction: column;
 }
-.not-approved{
+
+.not-approved {
     font-size: large;
     color: red;
-    
+
 }
 
-.approved
-{
+.approved {
     font-size: large;
-    color:green;
+    color: green;
 
 }
