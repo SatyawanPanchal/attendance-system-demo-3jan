@@ -1,5 +1,5 @@
 import express from "express";
-import { addDepartment ,getDepartments,addCourse,getCourses,addSemAndSection,addSubject,addTeacher,getTeacherAndSubjectForSection,getSections,addTeacherAndSubject,getUsers,updateApproval,approveRights } from "../../controllers/AdminControllers/AddDetails/AddDetails.js";
+import { addDepartment ,getDepartments,addCourse,getCourses,addSemAndSection,addSubject,addTeacher,getTeacherAndSubjectForSection,getSections,addTeacherAndSubject,getUsers,updateApproval,approveRights,affixTeacherAndSubject ,getIdOfTeacher} from "../../controllers/AdminControllers/AddDetails/AddDetails.js";
 
 const adminRouter=express.Router();
 
@@ -18,6 +18,8 @@ adminRouter.post('/addTeacherAndSubject',addTeacherAndSubject);
 adminRouter.post('/getUsers',getUsers) ;
 adminRouter.post('/updateApproval',updateApproval);
 adminRouter.post('/approveRights',approveRights);
+adminRouter.post('/affixTeacherAndSubject',affixTeacherAndSubject);
+adminRouter.post('/getIdOfTeacher',getIdOfTeacher);
  
  
 

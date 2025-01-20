@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import "./AddSubjects.css";
 import axios from "axios";
-import { generateSpecifiedId } from "../../utilities/createdMethods/generateId";
-import { rejectDuplicateSubjects } from "../../utilities/createdMethods/duplicateStringReject";
+import { generateSpecifiedId } from "../../../../Admin/src/utilities/createdMethods/generateId";
+import { rejectDuplicateSubjects } from "../../../../Admin/src/utilities/createdMethods/duplicateStringReject";
+import Navbar from "../Navbar/Navbar";
 
 const server_url = import.meta.env.VITE_SERVER_URL;
 const AddSubjects = () => {
   const [departmentNames, setDepartmentNames] = useState();
   const [courseNames, setCourseNames] = useState([]);
-  const [sectionNames,setSectionNames]=useState([]);
+  const [sectionNames, setSectionNames] = useState([]);
   const [subjectsData, setSubjectsData] = useState({
     departmentName: "",
     courseName: "",
     semesterName: "",
-    sectionName:"",
+    sectionName: "",
     subjectName: "",
     subjectId: "",
   });
@@ -28,25 +29,32 @@ const AddSubjects = () => {
     const submitSubjectDataToBackEnd = async () => {
       try {
         // for Duplicacy
-        const subjectDuplicates = await rejectDuplicateSubjects(subjectsData.subjectName, subjectsData.departmentName, subjectsData.courseName, subjectsData.sectionName, subjectsData.semesterName);
-    
-        if(subjectDuplicates && subjectDuplicates.length > 0){
-         setDuplicacyError(
-            `The department with name ${subjectDuplicates.map(element => element.subjectName).join(", ")} already exists.`
+        const subjectDuplicates = await rejectDuplicateSubjects(
+          subjectsData.subjectName,
+          subjectsData.departmentName,
+          subjectsData.courseName,
+          subjectsData.sectionName,
+          subjectsData.semesterName
+        );
+
+        if (subjectDuplicates && subjectDuplicates.length > 0) {
+          setDuplicacyError(
+            `The department with name ${subjectDuplicates
+              .map((element) => element.subjectName)
+              .join(", ")} already exists.`
           );
-           return;
+          return;
         }
 
-       setDuplicacyError("");
+        setDuplicacyError("");
 
         const res = await axios.post(
           `${server_url}/api/admin/addSubject`,
           subjectsData
-        )
-       if(res.data.success)
-       {
-       alert(res.data.message)
-       }
+        );
+        if (res.data.success) {
+          alert(res.data.message);
+        }
       } catch (error) {
         console.log("error data is not submitted", error.message);
       }
@@ -65,18 +73,18 @@ const AddSubjects = () => {
 
   // fetching the sections on basis of semesters selected
 
-  useEffect(()=>{
- 
-
-const fetchSectionNames=async()=>
-{
-    const response= await axios.post(`${server_url}/api/admin/getSections`  , subjectsData );
-      console.log('we get sections here --->',response.data.data);
+  useEffect(() => {
+    const fetchSectionNames = async () => {
+      const response = await axios.post(
+        `${server_url}/api/admin/getSections`,
+        subjectsData
+      );
+      console.log("we get sections here --->", response.data.data);
       setSectionNames(response.data.data);
-}
-fetchSectionNames();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[subjectsData.semesterName]);
+    };
+    fetchSectionNames();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subjectsData.semesterName]);
 
   // fetching department Names when page is rendered on first load
 
@@ -130,6 +138,8 @@ fetchSectionNames();
   }, [subjectsData.subjectName]);
 
   return (
+<>
+<Navbar/>
     <div className="main_container">
       <form onSubmit={handleSubmit}>
         {/* choose department */}
@@ -168,7 +178,6 @@ fetchSectionNames();
             <option value="">Select Course Below</option>
             {courseNames &&
               courseNames.map((course, index) => {
-                
                 return (
                   <option key={index} value={course.courseName}>
                     {course.courseName}
@@ -200,7 +209,6 @@ fetchSectionNames();
           </select>
         </div>
 
-
         {/* adding the sections below */}
 
         <div className="elements">
@@ -214,11 +222,14 @@ fetchSectionNames();
           >
             <option value="">Select Section Below</option>
 
-            {sectionNames&& sectionNames.map((section,index)=>{
-              return(
-                <option key={index} value={section.secitonName}>{section.sectionName}</option>
-              )
-            })}
+            {sectionNames &&
+              sectionNames.map((section, index) => {
+                return (
+                  <option key={index} value={section.secitonName}>
+                    {section.sectionName}
+                  </option>
+                );
+              })}
             {/* {semValues.map((sem, index) => {
               return (
                 <option key={index} value={sem}>
@@ -258,14 +269,14 @@ fetchSectionNames();
         </div>
 
         {/* Display the error message if it exists */}
-        <div className="error_message">
-          {duplicacyError}
-        </div>
+        <div className="error_message">{duplicacyError}</div>
 
         <button className="submitButton">Add</button>
       </form>
       {/* Subject Id- */}
     </div>
+
+    </>
   );
 };
 

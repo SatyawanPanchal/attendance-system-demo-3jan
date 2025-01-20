@@ -1,16 +1,14 @@
- 
-import AddSubjects from "../../addSubjects/AddSubjects.jsx"
-import Navbar from "../../Navbar/Navbar.jsx"
- 
+import AddSubjects from "../../../../../AcademicCoordinator/src/components/addSubjects/AddSubjects.jsx";
+import Navbar from "../../Navbar/Navbar.jsx";
 
 const Subjects = () => {
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <h1>Add Subjects Below</h1>
-      <AddSubjects/>
+      <AddSubjects />
     </div>
-  )
-}
+  );
+};
 
-export default Subjects
+export default Subjects;

@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar/Navbar";
 
 const AddTimeTable = () => {
   const daysOfWeek = [
+    "ALL",
     "MONDAY",
     "TUESDAY",
     "WEDNESDAY",
@@ -11,6 +12,7 @@ const AddTimeTable = () => {
     "FRIDAY",
     "SATURDAY",
     "SUNDAY",
+
   ];
 const initialValues={
   day: "",
@@ -34,6 +36,7 @@ const initialValues={
   const [teacherNames, setTeacherNames] = useState([]);
   const [subjectNames, setSubjectNames] = useState([]);
   const [teacherWithSameNameIds, setTeacherWithSameNameIds] = useState([]);
+   
 
   const [dayNames, setDayNames ] = useState(daysOfWeek);
 
@@ -93,6 +96,12 @@ const initialValues={
       console.log("error ", error.message);
     }
   }, [teacherSubjectData.teacherName]);
+
+
+  
+
+
+  // logging the data on any change
 
   useEffect(() => {
     console.log("", teacherSubjectData);

@@ -13,41 +13,32 @@ import sectionModel from "../../../models/AdminModels/AddSemAndSectionModel.js";
 import teacherAndSubjectModel from "../../../models/AdminModels/TeacherAndSubjectModel.js";
 import userModel from "../../../models/userModel/userModel.js";
 import jwt from "jsonwebtoken";
+import affixTeacherAndSubjectModel from "../../../models/AdminModels/affixTeacherSubjectModel.js";
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 
 const approveRights = async (req, res) => {
-  const { emailId,roles } = req.body;
+  const { emailId, roles } = req.body;
   const userWithUpdatedRoles = req.body;
-   
+
   // we want to return from here if user is already a superuser
 
   try {
-    const userFromDatabase=await userModel.findOne({emailId:emailId});
- if('user roles',userFromDatabase.roles.includes('SuperUser'))
- {
-    res.json({
-      success:true,
-      message:`${userFromDatabase.userName} is already a Super User`
-
-    })
- }  
-
+    const userFromDatabase = await userModel.findOne({ emailId: emailId });
+    if (("user roles", userFromDatabase.roles.includes("SuperUser"))) {
+      res.json({
+        success: true,
+        message: `${userFromDatabase.userName} is already a Super User`,
+      });
+    }
   } catch (error) {
     res.json({
-      success:false,
-      message:`no data updated`,
-    })
+      success: false,
+      message: `no data updated`,
+    });
   }
-  
-
-
-
-
-
-
 
   try {
     const updatedUser = await userModel.findOneAndUpdate(
@@ -67,14 +58,12 @@ const approveRights = async (req, res) => {
       console.log("no user is updated");
     }
   } catch (error) {
-    console.log('error updating user ::::',error.message);
-    
+    console.log("error updating user ::::", error.message);
   }
 };
 
 const updateApproval = async (req, res) => {
   const { emailId } = req.body;
-
 
   console.log("hi i am in updateApproval with data", emailId);
   try {
@@ -116,6 +105,102 @@ const getUsers = async (req, res) => {
       success: false,
       message: `${error.mesage} is the error in fetching users`,
     });
+  }
+};
+
+const getIdOfTeacher=async(req,res)=>{
+  
+  const {teacherName}=req.body;
+  console.log('i am in getIdOfTeacher with data ', teacherName);
+  try {
+    
+    const idsFound=await teacherModel.find(
+      {teacherName:teacherName},{teachersLocalId:1,_id:0});
+console.log(`we found the id of ${teacherName} as ${idsFound}` );
+
+if(idsFound)
+{
+  res.json({
+    success:true,
+    data:idsFound,
+    message:`id we found are ${idsFound}`
+  })
+}
+else{
+  res.json({
+    success:false,
+     
+    message:`id not found `
+  })
+}
+
+  } catch (error) {
+   console.log(`error is ${error.message}`);
+   res.json({
+    success:false,
+    
+    message:`id not found and error ${error.message}`
+  })
+    
+  }
+  
+}
+
+const affixTeacherAndSubject = async (req, res) => {
+  console.log(
+    "i am in affixTeacherAndSubject 👨‍🏫 🚉\n\n\n with data ",
+    req.body
+  );
+  const {
+    departmentName,
+    courseName,
+    semesterName,
+    sectionName,
+    teacherName,
+    teacherLocalId,
+    subjectName,
+  } = req.body;
+
+  //  check if same teacher have lecture on same day and same time
+
+  const ifSameClassOfTeacherExists = await affixTeacherAndSubjectModel.findOne({
+    teacherName: teacherName,
+    teacherLocalId: teacherLocalId,
+    subjectName: subjectName,
+  });
+  // console.log("same teacher is already fixed");
+
+  if (ifSameClassOfTeacherExists) {
+    return res.json({
+      success: false,
+      message: `${teacherName} have already fixed with the subject ${subjectName}`,
+    });
+  }
+
+  const newAffixTeacherAndSubject = new affixTeacherAndSubjectModel({
+    departmentName: departmentName,
+    courseName: courseName,
+    semesterName: semesterName.toUpperCase(),
+    sectionName: sectionName,
+    teacherName: teacherName,
+    teacherLocalId: teacherLocalId,
+    subjectName: subjectName,
+  });
+
+  try {
+    const savedSubjectWithTeacher = await newAffixTeacherAndSubject.save();
+    res.json({
+      success: true,
+      message: `${teacherName} teaches ${subjectName} saved successfully`,
+      data: savedSubjectWithTeacher,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: `data not saved ${error.message}`,
+    });
+
+    console.log("errror in saving ", error.message);
   }
 };
 
@@ -269,13 +354,11 @@ const getTeacherAndSubjectForSection = async (req, res) => {
       sectionName
     );
     console.log("section id fetched -->", id_of_section);
-
+    // finding teachers name ---
     const teacherNames = await teacherModel.find(
       {
         departmentId: id_of_department,
         courseId: id_of_course,
-        semesterName: semesterName.toUpperCase(),
-        sectionId: id_of_section,
       },
       { teacherName: 1, _id: 0 } // Projection to include teacherName and exclude _id
     );
@@ -285,6 +368,21 @@ const getTeacherAndSubjectForSection = async (req, res) => {
 
     console.log("unique teachers ---==>>>", uniqueTeachers);
 
+    // finding teachers local id
+    const teacherIds = await teacherModel.find(
+      {
+        departmentId: id_of_department,
+        courseId: id_of_course,
+      },
+      {
+        teachersLocalId: 1,
+        _id: 0,
+      } // Projection to include teacherName and exclude _id
+    );
+
+    console.log("local id 🆔", teacherIds);
+
+    //
     const subjectNames = await subjectModel.find(
       {
         departmentId: id_of_department,
@@ -299,7 +397,7 @@ const getTeacherAndSubjectForSection = async (req, res) => {
     res.json({
       success: true,
       message: `teachers and subjects fetched successfully`,
-      data: { subjectNames, uniqueTeachers },
+      data: { subjectNames, uniqueTeachers, teacherIds },
     });
   } catch (error) {
     res.json;
@@ -513,7 +611,9 @@ export {
   getTeacherAndSubjectForSection,
   getSections,
   addTeacherAndSubject,
+  affixTeacherAndSubject,
   getUsers,
   updateApproval,
   approveRights,
+  getIdOfTeacher,
 };
