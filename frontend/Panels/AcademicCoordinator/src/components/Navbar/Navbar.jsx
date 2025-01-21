@@ -4,7 +4,7 @@ const Navbar = () => {
   const location = useLocation();
   console.log("Current Route:", location.pathname);
   return (
-    <div className="submenu">
+    <div className="submenu academicCoordinatorNavbar">
       <ul className="navbar-ul">
         <li className={location.pathname === "/" ? "active" : ""}>
           <Link to={"/"}>Home</Link>

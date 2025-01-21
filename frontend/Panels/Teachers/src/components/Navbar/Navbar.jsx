@@ -5,7 +5,7 @@ const Navbar = () => {
 
 
   return (
-    <div className="submenu">
+    <div className="submenu teacherNavbar">
       <ul className="navbar-ul">
 
         <li className={location.pathname === "/" ? "active" : ""}> <Link to={'/'}>Teachers Home</Link></li>

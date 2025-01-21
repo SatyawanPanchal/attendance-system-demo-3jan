@@ -23,6 +23,7 @@ select {
 
 /* Table styles */
 table {
+  margin: 10px;
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;

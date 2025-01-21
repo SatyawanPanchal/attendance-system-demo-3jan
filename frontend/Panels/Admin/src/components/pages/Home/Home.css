@@ -25,6 +25,7 @@
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 20px;
 }
 
 .tabButton:hover {
@@ -37,10 +38,24 @@
     transform: translateY(0);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
-.activatedTable{
+.approveBtn, .updateBtn{
+    background: #476ee5;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-family: cursive;
+}
+.approveBtn:hover, .updateBtn:hover{
+    background: #1043db;
+}
+
+.activatedTable {
     font-family: cursive;
     font-style: 20px;
 }
+
 .approve-user-div {
     display: flex;
     flex-direction: column;
@@ -52,8 +67,18 @@
 
 }
 
+.defaultRow {
+    text-align: center;
+}
+
 .approved {
     font-size: large;
     color: green;
 
+}
+
+.rightsOpt label{
+    display: flex;
+    justify-content: start;
+    gap: 4px;
 }

@@ -121,7 +121,6 @@ const Home = () => {
         <div className=" ">
           {activeTab === "approveTab" && (
             <div className="approve-user-div">
-              <p>User Table</p>
               <table
                 border="1"
                 style={{ width: "100%", borderCollapse: "collapse" }}
@@ -153,7 +152,7 @@ const Home = () => {
                             {user.approved ? "Yes" : "No"}
                           </td>
                           <td>
-                            <button
+                            <button className="approveBtn"
                               onClick={() => updateApproval(user.emailId)}
                             >
                               Approve
@@ -165,7 +164,9 @@ const Home = () => {
                     
                   })}
 
-                  <tr>Rest All are approved</tr>
+                  <tr>                  
+                    <td colSpan='6' className="defaultRow">Rest All are approved</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -173,7 +174,6 @@ const Home = () => {
 
           {activeTab === "giveRights" && (
             <div className="approve-user-div">
-              <p>Giving Rights</p>
               <table
                 border="1"
                 style={{ width: "100%", borderCollapse: "collapse" }}
@@ -219,7 +219,7 @@ const Home = () => {
                             "Teacher",
                             "AcademicCoordinator",
                           ].map((role) => (
-                            <div key={role}>
+                            <div className="rightsOpt" key={role}>
                               <label>
                                 <input
                                   type="checkbox"
@@ -233,7 +233,7 @@ const Home = () => {
                             </div>
                           ))}
                         </div>
-                        <button onClick={() => approveRights(user)}>
+                        <button className="updateBtn" onClick={() => approveRights(user)}>
                           Update Rights
                         </button>
                       </td>
