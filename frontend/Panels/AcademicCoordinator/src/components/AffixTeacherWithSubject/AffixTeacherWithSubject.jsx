@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Navbar from "../Navbar/Navbar";
 
 const AffixTeacherWithSubject = () => {
   const server_url = import.meta.env.VITE_SERVER_URL;
@@ -9,12 +10,14 @@ const AffixTeacherWithSubject = () => {
     semesterName: "",
     sectionName:"",
     teacherName: "",
+    teacherLocalId: "",
     subjectName: "",
   });
   const [departmentNames, setDepartmentNames] = useState();
   const [sectionNames,setSectionNames]=useState([]);
   const [courseNames, setCourseNames] = useState([]);
   const [teacherNames,setTeacherNames]=useState([]);
+  const [teacherIds,setTeacherIds]=useState([]);
   const [subjectNames,setSubjectNames]=useState([]);
   
 
@@ -24,8 +27,15 @@ const AffixTeacherWithSubject = () => {
     e.preventDefault();
 
     try {
-      const response=await axios.post(`${server_url}/api/admin/addTeacherAndSubject`,teacherSubjectData);
+      const response=await axios.post(`${server_url}/api/admin/affixTeacherAndSubject`,teacherSubjectData);
       console.log('data saved =',response.data);
+      if(response.data.success)
+      {
+        alert(response.data.message);
+      } 
+      else{
+        alert(response.data.message);
+      }
       
     } catch (error) 
     {
@@ -49,6 +59,38 @@ const AffixTeacherWithSubject = () => {
   useEffect(() => {
     console.log("", teacherSubjectData);
   }, [teacherSubjectData]);
+
+  // fetching the id of teachers registered with same name , on the selection of teacher name
+
+  useEffect(()=>{
+    const fetchTeachersIdWithSameName=async ()=>{
+      try {
+        const response= await axios.post(`${server_url}/api/admin/getIdOfTeacher`,teacherSubjectData);
+        if(response.data.success)
+        {
+       
+          setTeacherIds(response.data.data)
+        }
+        else 
+        {
+          alert(response.data.message);
+        }
+        
+      } catch (error) {
+        console.log('error is ', error.message);
+        alert(`error ${error.message}`)
+        
+      }
+
+    }
+    fetchTeachersIdWithSameName( );
+  },[teacherSubjectData.teacherName])
+
+
+
+
+
+
 
 // fetching the sections on basis of semesters selected
 
@@ -108,7 +150,7 @@ useEffect(()=>{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teacherSubjectData.departmentName]);
 
-  // fetching the teacher and subjects on selection of section name
+  // fetching the teacherName and subjects on selection of section name
   // if department and course is null give a message to select them both
 
   useEffect(() => {
@@ -121,7 +163,10 @@ useEffect(()=>{
           `${server_url}/api/admin/getTeacherAndSubjectForSection`,
           teacherSubjectData
         );
-        setTeacherNames(response.data.data.teacherNames);
+        console.log('data fetched on section selction --🤫',response.data.data );
+        
+        setTeacherNames(response.data.data.uniqueTeachers);
+         
         setSubjectNames(response.data.data.subjectNames); 
 
       
@@ -144,6 +189,9 @@ useEffect(()=>{
 
   return (
     // adding the department
+
+    <>
+<Navbar/>
     <div className="main_container">
       <form onSubmit={handleSubmit}>
         <div className="elements">
@@ -253,6 +301,29 @@ useEffect(()=>{
           </select>
         </div>
 
+        {/* choose teacher Id*/}
+        <div className="elements">
+          <label htmlFor="">
+            Choose <b>Teacher Id</b>
+          </label>
+          <select
+            name="teacherLocalId"
+            value={teacherSubjectData.teacherLocalId}
+            onChange={handleChange}
+          >
+            <option value="">Select teacher Id Below</option>
+             {teacherIds&&teacherIds.map((teacherId,index)=>{
+              
+              return( 
+                <option key={index} value={teacherId.teachersLocalId}>{teacherId.teachersLocalId}</option>
+              )
+             })
+
+             }
+          </select>
+        </div>
+
+
         {/* choose subject */}
         <div className="elements">
           <label htmlFor="">
@@ -276,6 +347,7 @@ useEffect(()=>{
         <button className="submitButton">Add</button>
       </form>
     </div>
+    </>
   );
 };
 

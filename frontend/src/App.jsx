@@ -6,7 +6,7 @@ import Departments from "../Panels/Admin/src/components/pages/Departments/Depart
 import Courses from "../Panels/Admin/src/components/pages/Courses/Courses.jsx";
 import Teachers from "../Panels/Admin/src/components/pages/Teachers/Teachers.jsx";
 import SemAndSections from "../Panels/Admin/src/components/pages/SemAndSections/SemAndSections.jsx";
-import Subjects from "../Panels/Admin/src/components/pages/Subjects/Subjects.jsx";
+
 import LoginRegister from "./AppComponents/Login-Register/LoginRegister.jsx";
 import { useContext, useState } from "react";
 import { AuthContext } from "./AppComponents/Context/AuthContext/AuthContext.jsx";
@@ -21,6 +21,8 @@ import AddRollNumberRanges from "../Panels/AcademicCoordinator/src/pages/AddRoll
 import AddTimeSlots from "../Panels/AcademicCoordinator/src/pages/AddTimesSlots/AddTimeSlots.jsx";
 import AddTimeTable from "../Panels/AcademicCoordinator/src/pages/AddTimeTable/AddTimeTable.jsx";
 import AddStudents from "../Panels/AcademicCoordinator/src/pages/AddStudents/AddStudents.jsx";
+import AddSubjects from "../Panels/AcademicCoordinator/src/components/addSubjects/AddSubjects.jsx";
+import AffixTeacherWithSubject from "../Panels/AcademicCoordinator/src/components/AffixTeacherWithSubject/AffixTeacherWithSubject.jsx";
 
 const App = () => {
   const { userDetails } = useContext(AuthContext);
@@ -40,11 +42,11 @@ const App = () => {
           <Route path="/courses" element={<Courses />}></Route>
           <Route path="/semAndSection" element={<SemAndSections />}></Route>
           <Route path="/teachers" element={<Teachers />}></Route>
-          <Route path="/subjects" element={<Subjects />}></Route>
+
           <Route path="/logout" element={<Logout />}></Route>
         </Routes>
       )}
-      {(userRole === "Teacher" || userRole === "SuperUser") && (
+      {userRole === "Teacher" && (
         <Routes>
           <Route path="/" element={<TeachersHome />}></Route>
           <Route path="/markAttendance" element={<MarkAttendance />}></Route>
@@ -57,6 +59,8 @@ const App = () => {
       {userRole === "AcademicCoordinator" && (
         <Routes>
           <Route path="/" element={<AcademicCoordinatorHome />}></Route>
+          <Route path="/subjects" element={<AddSubjects />}></Route>
+          <Route path="/teacherAndSubject" element={<AffixTeacherWithSubject/>}></Route>
           <Route
             path="/addRollNumberRanges"
             element={<AddRollNumberRanges />}
