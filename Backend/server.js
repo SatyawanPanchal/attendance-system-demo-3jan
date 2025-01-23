@@ -26,3 +26,8 @@ app.use('/api/teachers',teacherRouter);
 app.listen(port, () => {
   console.log("server in listening at ", port);
 });
+
+app.get('/',(req,res)=>{
+  res.send('<script>alert("I am at server");</script>');
+  
+})

@@ -7,8 +7,8 @@ import Courses from "../Panels/Admin/src/components/pages/Courses/Courses.jsx";
 import Teachers from "../Panels/Admin/src/components/pages/Teachers/Teachers.jsx";
 import SemAndSections from "../Panels/Admin/src/components/pages/SemAndSections/SemAndSections.jsx";
 
-import LoginRegister from "./AppComponents/Login-Register/LoginRegister.jsx";
-import { useContext, useState } from "react";
+// import LoginRegister from "./AppComponents/Login-Register/LoginRegister.jsx";
+import { useContext , useState } from "react";
 import { AuthContext } from "./AppComponents/Context/AuthContext/AuthContext.jsx";
 import MarkAttendance from "../Panels/Teachers/src/pages/MarkAttendance/MarkAttendance.jsx";
 import ClasswiseAnalysis from "../Panels/Teachers/src/components/ClasswiseAnalysis/ClasswiseAnalysis.jsx";
@@ -28,14 +28,41 @@ const App = () => {
   const { userDetails } = useContext(AuthContext);
   // eslint-disable-next-line no-unused-vars
   const [loginStatus, setLoginStatus] = useState(true);
-  const user = userDetails.userName; // get from context
-  const userRole = userDetails.userRole;
+ // const user = userDetails.userName; // get from context
+ // const userRole = userDetails.userRole;
+ 
+
+const [nameAndRole,setNameAndRole]=useState({
+  name:"",
+  role:"",
+})
+const handleChange=(e)=>{
+  const {name,value}=e.target;
+  setNameAndRole((prevData)=>({
+    ...prevData,
+    [name]:value,
+  }))
+
+}
+
+
 
   return (
     <>
-      {user} is logged in as {userRole}
-      {!user && <LoginRegister setLoginStatus={setLoginStatus} />}
-      {(userRole === "Admin" || userRole === "SuperUser") && (
+    <div className="elements">
+
+    <label htmlFor="">Enter name</label>
+    <input type="text" name="name" value={nameAndRole.name} onChange={handleChange} />
+    </div>
+    <div className="elements">
+
+    <label htmlFor="">Enter role</label>
+    <input type="text" name="role" value={nameAndRole.role} onChange={handleChange} />
+    </div>
+    
+      {nameAndRole.name} is logged in as {nameAndRole.role}
+      {/* {!user && <LoginRegister setLoginStatus={setLoginStatus} />} */}
+      {(nameAndRole.role === "Admin" || nameAndRole.role === "SuperUser") && (
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/department" element={<Departments />}></Route>
@@ -46,7 +73,7 @@ const App = () => {
           <Route path="/logout" element={<Logout />}></Route>
         </Routes>
       )}
-      {userRole === "Teacher" && (
+      {nameAndRole.role === "Teacher" && (
         <Routes>
           <Route path="/" element={<TeachersHome />}></Route>
           <Route path="/markAttendance" element={<MarkAttendance />}></Route>
@@ -56,7 +83,7 @@ const App = () => {
           <Route path="/logout" element={<Logout />}></Route>
         </Routes>
       )}
-      {userRole === "AcademicCoordinator" && (
+      {nameAndRole.role === "AcademicCoordinator" && (
         <Routes>
           <Route path="/" element={<AcademicCoordinatorHome />}></Route>
           <Route path="/subjects" element={<AddSubjects />}></Route>

@@ -1,0 +1,50 @@
+# Node modules directory (contains all dependencies)
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor-specific files
+.vscode/
+.idea/
+*.swp
+
+# Build files and transpiled code
+dist/
+build/
+coverage/
+
+# Temporary files
+tmp/
+temp/
+
+# Package locks
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Test coverage reports
+coverage/
+
+# Debug files
+*.pid
+*.seed
+*.stackdump
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Security
+certs/
