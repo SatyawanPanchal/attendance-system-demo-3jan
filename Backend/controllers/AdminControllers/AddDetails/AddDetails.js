@@ -19,6 +19,67 @@ const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 
+const getTeachersFromCourse = async (req, res) => {
+  const { departmentNameOfTeacher, courseNameOfTeacher } = req.body;
+
+  const departmentName = departmentNameOfTeacher;
+  const courseName = courseNameOfTeacher;
+
+  try {
+    const department = await departmentModel.findOne({
+      departmentName: departmentName,
+    });
+    const id_of_department = department.departmentId;
+    console.log("department id fetched-->", id_of_department);
+
+    const course = await courseModel.findOne({
+      courseName: courseName,
+    });
+    const id_of_course = course.courseId;
+    console.log("course id fetched -->", id_of_course);
+
+    // finding teachers name ---
+    const teacherNames = await teacherModel.find(
+      {
+        departmentId: id_of_department,
+        courseId: id_of_course,
+      },
+      { teacherName: 1, _id: 0 } // Projection to include teacherName and exclude _id
+    );
+    const uniqueTeachers = Array.from(
+      new Set(teacherNames.map((teacher) => teacher.teacherName))
+    ).map((name) => ({ teacherName: name }));
+
+    console.log("unique teachers ---==>>>", uniqueTeachers);
+
+    // finding teachers local id
+    const teacherIds = await teacherModel.find(
+      {
+        departmentId: id_of_department,
+        courseId: id_of_course,
+      },
+      {
+        teachersLocalId: 1,
+        _id: 0,
+      } // Projection to include teacherName and exclude _id
+    );
+
+    console.log("local id 🆔", teacherIds);
+
+    res.json({
+      success: true,
+      teacherNames: uniqueTeachers,
+      teacherIds: teacherIds,
+      message: "☑️fetched teacherNames and teacherIds successfully ",
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: `❌ ${error.message}`,
+    });
+  }
+};
+
 const approveRights = async (req, res) => {
   const { emailId, roles } = req.body;
   const userWithUpdatedRoles = req.body;
@@ -108,43 +169,38 @@ const getUsers = async (req, res) => {
   }
 };
 
-const getIdOfTeacher=async(req,res)=>{
-  
-  const {teacherName}=req.body;
-  console.log('i am in getIdOfTeacher with data ', teacherName);
+const getIdOfTeacher = async (req, res) => {
+  const { teacherName } = req.body;
+  console.log("i am in getIdOfTeacher with data ", teacherName);
   try {
-    
-    const idsFound=await teacherModel.find(
-      {teacherName:teacherName},{teachersLocalId:1,_id:0});
-console.log(`we found the id of ${teacherName} as ${idsFound}` );
+    const idsFound = await teacherModel.find(
+      { teacherName: teacherName },
+      { teachersLocalId: 1, _id: 0 }
+    );
+    console.log(`we found the id of ${teacherName} as ${idsFound}`);
 
-if(idsFound)
-{
-  res.json({
-    success:true,
-    data:idsFound,
-    message:`id we found are ${idsFound}`
-  })
-}
-else{
-  res.json({
-    success:false,
-     
-    message:`id not found `
-  })
-}
+    if (idsFound) {
+      res.json({
+        success: true,
+        data: idsFound,
+        message: `id we found are ${idsFound}`,
+      });
+    } else {
+      res.json({
+        success: false,
 
+        message: `id not found `,
+      });
+    }
   } catch (error) {
-   console.log(`error is ${error.message}`);
-   res.json({
-    success:false,
-    
-    message:`id not found and error ${error.message}`
-  })
-    
+    console.log(`error is ${error.message}`);
+    res.json({
+      success: false,
+
+      message: `id not found and error ${error.message}`,
+    });
   }
-  
-}
+};
 
 const affixTeacherAndSubject = async (req, res) => {
   console.log(
@@ -152,14 +208,22 @@ const affixTeacherAndSubject = async (req, res) => {
     req.body
   );
   const {
-    departmentName,
-    courseName,
+    departmentNameOfSubject,
+    courseNameOfSubject,
     semesterName,
     sectionName,
     teacherName,
     teacherLocalId,
     subjectName,
   } = req.body;
+
+  const departmentName=departmentNameOfSubject;
+  const  courseName=courseNameOfSubject; 
+
+
+
+
+
 
   //  check if same teacher have lecture on same day and same time
 
@@ -265,10 +329,11 @@ const addTeacherAndSubject = async (req, res) => {
 };
 
 const getSections = async (req, res) => {
-  const { departmentName, courseName, semesterName } = req.body;
+  const { departmentNameOfSubject, courseNameOfSubject, semesterName } =
+    req.body;
   try {
-    const departmentId = await getSelectedDepartmentId(departmentName);
-    const courseId = await getSelectedCourseId(courseName);
+    const departmentId = await getSelectedDepartmentId(departmentNameOfSubject);
+    const courseId = await getSelectedCourseId(courseNameOfSubject);
 
     const semesterNameUppercase = semesterName.toUpperCase();
 
@@ -326,24 +391,24 @@ const addSemAndSection = async (req, res) => {
   }
 };
 
-const getTeacherAndSubjectForSection = async (req, res) => {
+const getSubjectForSection = async (req, res) => {
   console.log("i am in getTeacherAndSubjectForSection with data", req.body);
   const {
-    departmentName,
-    courseName,
+    departmentNameOfSubject,
+    courseNameOfSubject,
     semesterName,
     sectionName,
-    teacherName,
-    subjectName,
   } = req.body;
   try {
     const department = await departmentModel.findOne({
-      departmentName: departmentName,
+      departmentName: departmentNameOfSubject,
     });
     const id_of_department = department.departmentId;
     console.log("department id fetched-->", id_of_department);
 
-    const course = await courseModel.findOne({ courseName: courseName });
+    const course = await courseModel.findOne({
+      courseName: courseNameOfSubject,
+    });
     const id_of_course = course.courseId;
     console.log("course id fetched -->", id_of_course);
 
@@ -354,33 +419,6 @@ const getTeacherAndSubjectForSection = async (req, res) => {
       sectionName
     );
     console.log("section id fetched -->", id_of_section);
-    // finding teachers name ---
-    const teacherNames = await teacherModel.find(
-      {
-        departmentId: id_of_department,
-        courseId: id_of_course,
-      },
-      { teacherName: 1, _id: 0 } // Projection to include teacherName and exclude _id
-    );
-    const uniqueTeachers = Array.from(
-      new Set(teacherNames.map((teacher) => teacher.teacherName))
-    ).map((name) => ({ teacherName: name }));
-
-    console.log("unique teachers ---==>>>", uniqueTeachers);
-
-    // finding teachers local id
-    const teacherIds = await teacherModel.find(
-      {
-        departmentId: id_of_department,
-        courseId: id_of_course,
-      },
-      {
-        teachersLocalId: 1,
-        _id: 0,
-      } // Projection to include teacherName and exclude _id
-    );
-
-    console.log("local id 🆔", teacherIds);
 
     //
     const subjectNames = await subjectModel.find(
@@ -397,7 +435,7 @@ const getTeacherAndSubjectForSection = async (req, res) => {
     res.json({
       success: true,
       message: `teachers and subjects fetched successfully`,
-      data: { subjectNames, uniqueTeachers, teacherIds },
+      data: { subjectNames },
     });
   } catch (error) {
     res.json;
@@ -608,7 +646,7 @@ export {
   getCourses,
   addSubject,
   addTeacher,
-  getTeacherAndSubjectForSection,
+  getSubjectForSection,
   getSections,
   addTeacherAndSubject,
   affixTeacherAndSubject,
@@ -616,4 +654,5 @@ export {
   updateApproval,
   approveRights,
   getIdOfTeacher,
+  getTeachersFromCourse,
 };

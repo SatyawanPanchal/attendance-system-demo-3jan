@@ -5,7 +5,9 @@ import { createContext, useEffect, useState } from "react";
 
 
 export const CommonContexts=createContext();
+
 const server_url=import.meta.env.VITE_SERVER_URL;
+
 export const CommonContextsProvider=(props)=>
 {
     const [departmentNames,setDepartmentNames]=useState([])

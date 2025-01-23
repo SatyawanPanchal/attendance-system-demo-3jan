@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
- 
+
 import { toast } from "react-toastify";
-import './MarkAttendance.css'
+import "./MarkAttendance.css";
 import {
-    classPreK,
+  classPreK,
   classKS1,
   classKS2,
   classClass1,
@@ -14,141 +14,193 @@ import {
 import PieChart from "../../components/PieChart/PieChart.jsx";
 import Test from "../../components/Test/Test.jsx";
 import Navbar from "../../components/Navbar/Navbar.jsx";
+import { AuthContext } from "../../../../../src/AppComponents/Context/AuthContext/AuthContext.jsx";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 const MarkAttendance = () => {
-    const [classSelected, setClassSelected] = useState("");
-    const [studentsList, setStudentsList] = useState(null);
-    const [selectedDate, setSelectedDate] = useState("");
-    const [attendance, setAttendance] = useState({});
-    const [presentStatus, setPresentStatus] = useState({ present: 0, absent: 0 });
-    
-    const handleChage = async (e) => {
-        const { value } = e.target;
-        console.log("class selected =====>", value);
-        setClassSelected(value);
-        setSelectedDate("");
-        
-        if (value === "PreK") {
-            setStudentsList(classPreK.students);
-        } else if (value === "KS1") {
-            setStudentsList(classKS1.students);
-        } else if (value === "KS2") {
+  const { userDetails } = useContext(AuthContext);
+
+  const [classSelected, setClassSelected] = useState("");
+  const [studentsList, setStudentsList] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [attendance, setAttendance] = useState({});
+  const [presentStatus, setPresentStatus] = useState({ present: 0, absent: 0 });
+  const [dayOfWeek, setDayOfWeek] = useState("");
+
+  // finding the day from day
+  const getDayOfWeek = (dateString) => {
+    const date = new Date(dateString); // Create a Date object
+    const days = [
+      "SUNDAY",
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY",
+    ];
+    return days[date.getDay()]; // Get the day of the week
+  };
+
+  // handling the change in any day ...
+  const handleChage = async (e) => {
+    const { value } = e.target;
+    console.log("class selected =====>", value);
+    setClassSelected(value);
+    setSelectedDate("");
+
+    if (value === "PreK") {
+      setStudentsList(classPreK.students);
+    } else if (value === "KS1") {
+      setStudentsList(classKS1.students);
+    } else if (value === "KS2") {
       setStudentsList(classKS2.students);
     } else if (value === "Class1") {
       setStudentsList(classClass1.students);
     } else if (value === "Class2") {
-        setStudentsList(classClass2.students);
+      setStudentsList(classClass2.students);
     } else if (value === "Class3") {
-        setStudentsList(classClass3.students);
+      setStudentsList(classClass3.students);
     }
-};
+  };
 
-const handleDateChange = (e) => {
+  const handleDateChange = (e) => {
     const { name, value } = e.target;
     setSelectedDate(value);
     setAttendance({});
-    
+
     console.log("date--->", name, value);
     if (studentsList && studentsList.length > 0) {
-        setAttendance((prevAttendance) => {
-            const newAttendance = { ...prevAttendance };
-            
-            studentsList.forEach((student) => {
-                if (!newAttendance[student.roll]) {
-                    newAttendance[student.roll] = {};
-                }
-                newAttendance[student.roll][value] = "P";
-            });
-            
-            return newAttendance;
+      setAttendance((prevAttendance) => {
+        const newAttendance = { ...prevAttendance };
+
+        studentsList.forEach((student) => {
+          if (!newAttendance[student.roll]) {
+            newAttendance[student.roll] = {};
+          }
+          newAttendance[student.roll][value] = "P";
         });
+
+        return newAttendance;
+      });
     }
   };
 
   const handleAttendanceClick = (roll) => {
-      if (!selectedDate) {
-          alert("Please select the date first");
-          return;
-        }
-        
-        setAttendance((prevAttendance) => ({
-            ...prevAttendance,
-            [roll]: {
-                ...prevAttendance[roll],
-                [selectedDate]:
-                prevAttendance[roll]?.[selectedDate] === "P" ? "A" : "P",
-            },
-        }));
-    };
-    
-    useEffect(() => {
-        function attendanceFinder(attendanceRecord, date) {
-            let presentCount = 0;
-            let absentCount = 0;
-            
-            // Iterate through each student's attendance record
-            // eslint-disable-next-line no-unused-vars
-            for (const [roll, records] of Object.entries(attendanceRecord)) {
-                if (records[date] === "P") {
+    if (!selectedDate) {
+      alert("Please select the date first");
+      return;
+    }
+
+    setAttendance((prevAttendance) => ({
+      ...prevAttendance,
+      [roll]: {
+        ...prevAttendance[roll],
+        [selectedDate]:
+          prevAttendance[roll]?.[selectedDate] === "P" ? "A" : "P",
+      },
+    }));
+  };
+
+  //fetching the teachers classes on loading first time
+
+  useEffect(() => {
+    //console.log("email id of ", userDetails.emailId);
+  }, []);
+
+  useEffect(() => {
+    function attendanceFinder(attendanceRecord, date) {
+      let presentCount = 0;
+      let absentCount = 0;
+
+      // Iterate through each student's attendance record
+      // eslint-disable-next-line no-unused-vars
+      for (const [roll, records] of Object.entries(attendanceRecord)) {
+        if (records[date] === "P") {
           presentCount++;
         } else if (records[date] === "A") {
           absentCount++;
         }
+      }
+
+      setPresentStatus({ present: presentCount, absent: absentCount });
+
+      return { presentCount, absentCount };
     }
+
+    attendanceFinder(attendance, selectedDate);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attendance]);
+
+  useEffect(() => {
+    console.log('selected date is changed❤️');
     
-    setPresentStatus({ present: presentCount, absent: absentCount });
+    const day=getDayOfWeek(selectedDate);
+    setDayOfWeek(day)
+    console.log(`day on selected date ${day}`);
     
-    return { presentCount, absentCount };
+
+    //  function to send a req to server that if there is any class on this day then send the class names
+    const fetchClasseNamesForTheDay = async () => {
+      try {
+        const response = await axios.post(
+          `${serverUrl}/api/teachers/getClasseNamesForTheDay`,
+          { day: day , emailId: userDetails.emailId }
+        );
+if(response.data.success)
+{
+
+}else{
+  alert(response.data.message);
 }
 
-attendanceFinder(attendance, selectedDate);
-
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, [attendance]);
-
-useEffect(() => {
-    const attendance_assigned_for_date = async () => {
-        const res = await axios.post(`${serverUrl}/api/attendance/checkDateforAttendance`, {
-            selectedDate,
-            classSelected,
-        });
-        const messageFromServer_attendaceExists = res.data.success;
-        if (messageFromServer_attendaceExists) {
-            toast.dark(res.data.message);
-            setSelectedDate("");
+        console.log("response of ... fetchClassnames-->", response.data);
+      } catch (error) {
+        console.log("error we got in fetching classes   ", error.message);
       }
     };
-    attendance_assigned_for_date();
-    console.log("selcted date--->", selectedDate);
-}, [selectedDate]);
 
-const submitAttendance = async () => {
+    fetchClasseNamesForTheDay()
+  }, [selectedDate]);
+
+  // fetching the class Names of students of the class on first load of the marks
+
+  const submitAttendance = async () => {
     const res = await axios.post(
-        `${serverUrl}/api/attendance/save-attendance`,
-        { studentsList, selectedDate, classSelected, attendance }
+      `${serverUrl}/api/attendance/save-attendance`,
+      { studentsList, selectedDate, classSelected, attendance }
     );
-    
+
     toast.success(res.data.message);
     console.log("message from backend :", res.data.message);
     //   setAttendance({});
     setSelectedDate("");
-};
-return (
+  };
+  return (
     <>
-    <Navbar/>
-      <div className="home-div">
+      <Navbar />
+      <div className="home-div main_container">
+        {/* containing the lecture selection */}
         <form className="attendance-form" action="">
-          <select onChange={handleChage} name="class" id="">
-            <option value="">Select class</option>
-            <option value="PreK">PRE-K</option>
-            <option value="KS1">KS-1</option>
-            <option value="KS2">KS-2</option>
-            <option value="Class1">CLASS 1</option>
-            <option value="Class2">CLASS 2</option>
-            <option value="Class3">CLASS 3</option>
-            <option value="">CLASS 4</option>
-          </select>
+          {/* select date ... */}
+
+          <div className="elements">
+            <label htmlFor="">Select the date</label>
+            <Test
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
+          </div>
+
+          <div className="elements">
+            <label htmlFor="">Select the class</label>
+
+            <select onChange={handleChage} name="class" id="">
+              <option value="">Select Your class</option>
+            </select>
+          </div>
           {classSelected && (
             <input
               type="date"
@@ -159,6 +211,7 @@ return (
           )}
         </form>
 
+        {/* displaying the table of class students on the basis of class slected */}
         <div className="student-table-container">
           <h1>Student List-{classSelected}</h1>
 
@@ -205,6 +258,8 @@ return (
             </tbody>
           </table>
         </div>
+
+        {/* Attendance submission button */}
         <div className="submit-div">
           <button
             className="absent-button submit-button"
@@ -213,7 +268,7 @@ return (
             Submit Attendance
           </button>
         </div>
-
+        {/* pie chart of the attendance  */}
         <div className="summary-and-graph-div">
           <div className="attendace-status-div">
             <h2>
@@ -230,10 +285,8 @@ return (
           {/* for limited date calender */}
         </div>
       </div>
-      <Test />
     </>
   );
 };
 
- 
 export default MarkAttendance;

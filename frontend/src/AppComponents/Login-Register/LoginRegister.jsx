@@ -47,20 +47,21 @@ const LoginRegister = ({ setLoginStatus }) => {
       alert(response.data.message);
       console.log("token", response.data.token);
 
-      alert(response.data.token);
+      //alert(response.data.token);
       if (response.data.data.success) {
         console.log("we are logged in ");
 
-        const { userName, role, success } = response.data.data;
+        const { userName, role, success  } = response.data.data;
         setLoginDetails({
           userName: userName,
           userRole: role,
           success: success,
+          emailId:userData.emailId,
           token: response.data.token,
         });
-        alert(
-          `${response.data.data.userName} logged in as ${response.data.data.role}  successfully`
-        );
+        // alert(
+        //   `${response.data.data.userName} logged in as ${response.data.data.role}  successfully`
+        // );
       } else {
         alert(response.data.message);
       }

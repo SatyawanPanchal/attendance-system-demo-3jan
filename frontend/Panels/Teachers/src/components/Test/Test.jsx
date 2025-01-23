@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-const Test = () => {
-  const [selectedDate, setSelectedDate] = useState("");
+const Test = ({selectedDate,setSelectedDate  }) => {
+
   const [minDate, setMinDate] = useState("");
   const [maxDate, setMaxDate] = useState("");
 
@@ -31,7 +31,7 @@ const Test = () => {
 
 
   return (
-    <div>
+    <>
       <input
         type="date"
         name="datePicker"
@@ -40,7 +40,7 @@ const Test = () => {
         value={selectedDate}
         onChange={handleDateChange}
       />
-    </div>
+    </>
   );
 };
 

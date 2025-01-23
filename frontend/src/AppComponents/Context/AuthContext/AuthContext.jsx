@@ -6,15 +6,14 @@ import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
 
 export const AuthProvider = (props) => {
+  const navigate = useNavigate();
 
-  const navigate=useNavigate();
-  
   const userInitialValues = {
     userName: "",
     userRole: "",
+    emailId: "",
     token: null,
   };
-
 
   const [userDetails, setUserDetails] = useState(userInitialValues);
 
@@ -22,6 +21,7 @@ export const AuthProvider = (props) => {
     const savedUser = localStorage.getItem("savedUser");
     const authToken = localStorage.getItem("authToken");
     const savedRole = localStorage.getItem("savedRole");
+    const emailId=localStorage.getItem("emailId");
 
     console.log("saved token and saved user", savedUser, authToken);
 
@@ -30,27 +30,29 @@ export const AuthProvider = (props) => {
         userName: savedUser,
         token: authToken,
         userRole: savedRole,
+        emailId:emailId,
       });
     }
   }, []);
 
   const setLoginDetails = (loginData) => {
-    const { userName, userRole, token } = loginData;
+    const { userName, userRole,emailId, token } = loginData;
     setUserDetails(loginData);
     localStorage.setItem("authToken", token);
     localStorage.setItem("savedUser", userName);
     localStorage.setItem("savedRole", userRole);
-
+    localStorage.setItem("emailId",emailId);
   };
 
   const logout = () => {
-    console.log('i am in logout method ⛹️‍♀️');
-    
+    console.log("i am in logout method ⛹️‍♀️");
+
     localStorage.removeItem("authToken");
     localStorage.removeItem("savedUser");
     localStorage.removeItem("savedRole");
-     navigate("/")
-     window.location.reload();
+    localStorage.removeItem("emailId");
+    navigate("/");
+    window.location.reload();
     // setUserDetails(userInitialValues);
   };
   const contextValue = { userDetails, setLoginDetails, logout };

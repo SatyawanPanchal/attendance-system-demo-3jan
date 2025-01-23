@@ -79,13 +79,36 @@ const AddStudents = async (req, res) => {
       courseName: courseName,
       semesterName: semesterName,
       sectionName: sectionName,
-      studentName: studentName,
-      fatherName: fatherName,
+      studentName: studentName.toUpperCase(),
+      fatherName: fatherName.toUpperCase(),
       rollNumber: rollNumber,
       whatsAppNumber: whatsAppNumber,
     });
-    const studentSaved = await newstudentModel.save();
-  } catch (error) {}
+
+    const isStudentAlreadyExisting = await studentModel.findOne({
+      rollNumber: rollNumber,
+    });
+
+    if (isStudentAlreadyExisting) {
+      res.json({
+        success: false,
+        message: `student already exists with the roll number ${rollNumber}`,
+      });
+    } else {
+      const studentSaved = await newstudentModel.save();
+      console.log(`students ${studentName} saved successfully `);
+
+      res.json({
+        success: true,
+        message: `student ${studentName} saved at roll ${rollNumber}`,
+      });
+    }
+  } catch (error) {
+    res.json({
+      success: false,
+      message: `error saving students ${error.message}`,
+    });
+  }
 };
 
 export { AddStudents, getLocalId };
