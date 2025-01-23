@@ -29,7 +29,7 @@ form {
 .elements input,
 select,
 textarea {
-    width: 200px;
+    width: 250px;
     height: 40px;
     border-radius: 4px;
     outline: none;
@@ -38,7 +38,7 @@ textarea {
 }
 
 .elements select {
-    width: 205px;
+    width: 255px;
 }
 
 .elements select option {
@@ -91,18 +91,19 @@ input:focus {
 
 @media (max-width: 500px) {
     form {
-        width: full;
-        padding: 0;
+        width: 100%;
+        padding: 20px 4px;
+        margin: 0;
     }
 
-    .elements label {
-        width: 100px;
+    .elements select {
+        width: 155px;
     }
 
     .elements input,
     select,
     textarea {
-        width: 200px;
+        width: 150px;
         height: 40px;
         border-radius: 4px;
         outline: none;

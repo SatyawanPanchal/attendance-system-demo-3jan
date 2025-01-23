@@ -20,6 +20,7 @@ form {
     display: flex;
     align-items: center;
     justify-content: space-around;
+    margin: 2px 0px;
 }
 
 .elements label {
@@ -29,7 +30,7 @@ form {
 .elements input,
 select,
 textarea {
-    width: 200px;
+    width: 250px;
     height: 40px;
     border-radius: 4px;
     outline: none;
@@ -38,7 +39,7 @@ textarea {
 }
 
 .elements select {
-    width: 205px;
+    width: 255px;
 }
 
 .elements select option {
@@ -49,7 +50,7 @@ textarea {
 .elements textarea:focus,
 select:focus,
 input:focus {
-    border: 2px solid #ad4c5b
+    border: 2px solid #918c8c
 }
 
 .elements input::placeholder {
@@ -68,9 +69,7 @@ input:focus {
 
 .submitButton {
     background-color: #2b2b2be4;
-    /* Replace with the hex code of your chosen color */
     color: #FFD;
-    /* Text color for contrast */
     font-weight: 600;
     border: none;
     border-radius: 5px;
@@ -93,18 +92,18 @@ input:focus {
 
 @media (max-width: 500px) {
     form {
-        width: full;
-        padding: 0;
+        width: 100%;
+        padding: 20px 4px ;
+        margin: 0;
     }
 
-    .elements label {
-        width: 100px;
+    .elements select {
+        width: 155px;
     }
-
     .elements input,
     select,
     textarea {
-        width: 200px;
+        width: 150px;
         height: 40px;
         border-radius: 4px;
         outline: none;

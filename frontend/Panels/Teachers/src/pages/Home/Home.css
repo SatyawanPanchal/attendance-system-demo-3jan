@@ -1,126 +1,118 @@
-.form{
- margin-top: 2rem;
- display: flex;
- flex-direction: row;
- justify-content: space-around;
+.form {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
-/* styles.css */
-
-/* Container styling for the student table */
 .student-table-container {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9; /* Light background to differentiate the table section */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Styling for the table element itself */
-  .student-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Header row styling */
-  .student-table th {
-    background-color: #4CAF50; /* Green background for table headers */
-    color: white; /* White text for headers */
-    padding: 12px; /* Spacing inside the header cells */
-    text-align: left; /* Left-align the text */
-    border-bottom: 2px solid #ddd; /* Bottom border for better separation */
-  }
-  
-  /* Table data cell styling */
-  .student-table td {
-    padding: px; /* Spacing inside the cells */
-    border-bottom: 1px solid #ddd; /* Light border between rows */
-  }
-  
-  /* Add hover effect to rows for better visibility */
-  .student-table tr:hover {
-    background-color: #f1f1f1; /* Light gray background when hovering over a row */
-  }
-  
-  /* First column alignment */
-  .student-table td:first-child {
-    text-align: center; /* Center-align the S. No. column */
-  }
-  
-  /* Alternating row colors to improve readability */
-  .student-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  /* Optional styling for the table title */
-  .student-table-container h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  .present-button , .absent-button {
-   
-    color: white; /* White text */
-    border: none; /* Remove default border */
-    padding: 8px 16px; /* Add some padding */
-    text-align: center; /* Center the text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Inline block to control padding */
-    font-size: 14px; /* Set font size */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor to indicate clickability */
-  }
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .present-button{
-    background-color: #4CAF50; /* Green background */
-  }
-  .absent-button{
-    background-color: #af4c5b; /* Green background */
-  }
-  
-  .action-button:hover {
-    background-color: #45a049; /* Darker green for hover effect */
-  }
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
 
-  .summery-and-graph-div
-  {
-    width: 90%;
-    /* justify-content: center; */
-    display: flex;
-    
-    flex-direction: row;
-    flex-wrap: wrap;
-   
-    border: 2px solid goldenrod;
-    padding: 15px;
-    margin: 10px;
-    gap: 10px;
-    justify-content: space-between;
-    
-  }
-  .graph-div{
-    width: 50%;
-    background-color: beige;
-  }
-  .attendace-status-div{
-    background-color: beige;
-    padding :15px;
-     
-  }
-  .pie-chart{
-    font-weight: 700;
-  }
-  .submit-div{
-    /* background-color: red; */
-    display: flex;
-    justify-content: right;
-    padding-right: 20px;
-    
-  }
+.student-table th {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
 
-  .submit-button{
-    font-weight: 600;
-  }
+}
+
+.student-table td {
+  border-bottom: 1px solid #ddd;
+}
+
+.student-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* First column alignment */
+.student-table td:first-child {
+  text-align: center;
+}
+
+.student-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.student-table-container h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.present-button,
+.absent-button {
+
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.present-button {
+  background-color: #4CAF50;
+}
+
+.absent-button {
+  background-color: #af4c5b;
+}
+
+.action-button:hover {
+  background-color: #45a049;
+}
+
+.summery-and-graph-div {
+  width: 90%;
+  display: flex;
+
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  border: 2px solid goldenrod;
+  padding: 15px;
+  margin: 10px;
+  gap: 10px;
+  justify-content: space-between;
+
+}
+
+.graph-div {
+  width: 50%;
+  background-color: beige;
+}
+
+.attendace-status-div {
+  background-color: beige;
+  padding: 15px;
+}
+
+.pie-chart {
+  font-weight: 700;
+}
+
+.submit-div {
+  display: flex;
+  justify-content: right;
+  padding-right: 20px;
+}
+
+.submit-button {
+  font-weight: 600;
+}

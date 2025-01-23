@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
+import "./AffixTeacherWithSubject.css";
 
 const AffixTeacherWithSubject = () => {
   const server_url = import.meta.env.VITE_SERVER_URL;
@@ -220,7 +221,7 @@ const AffixTeacherWithSubject = () => {
          
           {/* inputting the details of teacher */}
           <fieldset>
-            <legend>---Select details of teacher you want to assign</legend>
+            <legend>Select details of teacher you want to assign</legend>
             <div className="elements">
               <label htmlFor="">
                 Choose<b> Department</b>
@@ -315,7 +316,7 @@ const AffixTeacherWithSubject = () => {
           {/* Department  */}
 
           <fieldset>
-            <legend>select details of subject</legend>
+            <legend>Select details of subject</legend>
 
             <div className="elements">
               <label htmlFor="">
