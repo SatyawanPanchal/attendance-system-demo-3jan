@@ -1,0 +1,10 @@
+ .graphs-container-div{
+    /* background-color: rgb(144, 29, 29); */
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 15px;
+    border-radius: 20px;
+ }

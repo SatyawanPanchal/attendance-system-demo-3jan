@@ -17,7 +17,48 @@ const createToken = (id,role) => {
 };
 
 
+const registerSuperUser=async(req,res)=>{
+  console.log('i am in registration of super user 🦹‍♂️🦹‍♀️🦹‍♀️');
+  const { departmentName, localId, userName, emailId, password,roles,approved } = req.body;
+  console.log("i am in registerUser at backend with data ", req.body);
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    console.log("hashed password---->", hashedPassword);
 
+    const alreadyExisting = await userModel.findOne({ emailId: emailId });
+
+    if (alreadyExisting) {
+      res.json({
+        success: false,
+        message: "email already existing",
+      });
+    }
+
+    const newUser = new userModel({
+      departmentName: departmentName,
+      localId: localId,
+      userName: userName,
+      emailId: emailId,
+      password: hashedPassword,
+      roles:roles,
+      approved:approved,
+    });
+
+    const savedUser = await newUser.save();
+
+    if (savedUser) {
+      console.log("SuperUser is already saved ", savedUser);
+      res.json({
+        success:true,
+        message:`user with email id ${emailId} saved successfully`,
+      })
+    }
+  } catch (error) {
+    console.log("error ", error.message);
+  }
+  
+}
 
 
 const loginUser = async (req, res) => {
@@ -271,4 +312,5 @@ export {
   getNameFromId,
   sendOtp,
   verifyOtp,
+  registerSuperUser,
 };

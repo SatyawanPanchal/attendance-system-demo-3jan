@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -10,20 +10,23 @@ const userSchema = new mongoose.Schema(
     roles: {
       type: [String], // Array of strings to allow multiple roles
       enum: [
+        "SuperUser",
         "Admin",
         "Principal",
         "Student",
         "Parent",
         "Teacher",
         "AcademicCoordinator",
-        "Dummy"
+        "Dummy",
       ], // Restrict valid roles
-      default: ['Dummy'], // Default to "dummy"
+      default: ["Dummy"], // Default to "dummy"
     },
     approved: { type: Boolean, required: true, default: false },
   },
   { timestamps: true }
 );
 
-const userModel = mongoose.models.registeredUsers || mongoose.model('registeredUsers', userSchema);
+const userModel =
+  mongoose.models.registeredUsers ||
+  mongoose.model("registeredUsers", userSchema);
 export default userModel;

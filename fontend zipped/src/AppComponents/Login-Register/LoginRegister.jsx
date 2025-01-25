@@ -51,12 +51,12 @@ const LoginRegister = ({ setLoginStatus }) => {
       if (response.data.data.success) {
         console.log("we are logged in ");
 
-        const { userName, role, success } = response.data.data;
+        const { userName, role, success  } = response.data.data;
         setLoginDetails({
           userName: userName,
           userRole: role,
           success: success,
-          emailId: userData.emailId,
+          emailId:userData.emailId,
           token: response.data.token,
         });
         // alert(
@@ -135,12 +135,12 @@ const LoginRegister = ({ setLoginStatus }) => {
     e.preventDefault();
   };
 
-  // displaying the userDetails on any change
   useEffect(() => {
     console.log("user data -->", userData);
   }, [userData]);
 
   //fetching the employee ids on the selection of the department name
+
   useEffect(() => {
     const getEmployeeLocalIds = async () => {
       const departmentName = userData.departmentName;
@@ -162,6 +162,7 @@ const LoginRegister = ({ setLoginStatus }) => {
   }, [userData.departmentName]);
 
   // fetching the teacherName on selection of localId or employee local id
+
   useEffect(() => {
     const fetchUserName = async () => {
       try {
@@ -186,33 +187,6 @@ const LoginRegister = ({ setLoginStatus }) => {
     const userName = fetchUserName();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData.localId]);
-  //
-  useEffect(() => {
-    
-    const superUserRegistrationData = {
-      departmentName: "developer",
-      localId: "satyawan",
-      userName: "SuperUser",
-      emailId: "satyawanteacher@gmail.com",
-      password: "9992026088",
-      roles:["SuperUser"],
-      approved: "true",
-    };
-
-
-    const submitSuperUser = async () => {
-      try {
-        const response=await axios.post(`${server_url}/api/user/registerSuperUser`,superUserRegistrationData);
-        console.log('response on superuser registration',response.data);
-        alert(response.data);
-      } catch (error) {
-        alert(error.message);
-        
-      }
-    };
-
-    submitSuperUser();
-  }, []);
 
   return (
     <>
@@ -368,23 +342,6 @@ const LoginRegister = ({ setLoginStatus }) => {
           )}
           {/*  re-enter the password */}
           {/* choose for login and registration */}
-          {isLoggingIn ? (
-            <button
-              className="SubmitButton"
-              type="submit"
-              onClick={() => handleSubmitButtonClickForLogin()}
-            >
-              Login
-            </button>
-          ) : (
-            <button
-              className="SubmitButton"
-              type="submit"
-              onClick={() => handleSubmitButtonClickForRegistration()}
-            >
-              Register
-            </button>
-          )}{" "}
           {!isLoggingIn ? (
             <div className="element">
               <label htmlFor="">
@@ -411,6 +368,23 @@ const LoginRegister = ({ setLoginStatus }) => {
               </label>
             </div>
           )}
+          {isLoggingIn ? (
+            <button
+              className="SubmitButton"
+              type="submit"
+              onClick={() => handleSubmitButtonClickForLogin()}
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              className="SubmitButton"
+              type="submit"
+              onClick={() => handleSubmitButtonClickForRegistration()}
+            >
+              Register
+            </button>
+          )}{" "}
         </form>
       </div>
     </>

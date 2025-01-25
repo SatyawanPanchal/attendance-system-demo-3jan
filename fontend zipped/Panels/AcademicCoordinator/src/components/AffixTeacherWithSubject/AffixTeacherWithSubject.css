@@ -1,0 +1,22 @@
+fieldset {
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+legend {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    padding: 0 10px;
+}
+
+fieldset .elements {
+    margin-bottom: 15px;
+}
+
+fieldset .elements select {
+    margin-top: 5px;
+}
