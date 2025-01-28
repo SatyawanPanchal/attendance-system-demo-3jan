@@ -4,7 +4,7 @@ import teacherModel from "../../models/AdminModels/TeacherEnteryModel.js";
 import nodemailer from "nodemailer";
 import otpModel from "../../models/userModel/otpModel.js";
 import bcrypt from "bcrypt";
- 
+
 import userModel from "../../models/userModel/userModel.js";
 
 const userId = process.env.USER_ID;
@@ -12,14 +12,23 @@ const passW = process.env.USER_PASS;
 
 // let us create the token by using id...
 
-const createToken = (id,role) => {
-  return jwt.sign({userId:id,userRole:role }, process.env.JWT_SECRET,{ expiresIn: '1h' });
+const createToken = (id, role) => {
+  return jwt.sign({ userId: id, userRole: role }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
 };
 
-
-const registerSuperUser=async(req,res)=>{
-  console.log('i am in registration of super user 🦹‍♂️🦹‍♀️🦹‍♀️');
-  const { departmentName, localId, userName, emailId, password,roles,approved } = req.body;
+const registerSuperUser = async (req, res) => {
+  console.log("i am in registration of super user 🦹‍♂️🦹‍♀️🦹‍♀️");
+  const {
+    departmentName,
+    localId,
+    userName,
+    emailId,
+    password,
+    roles,
+    approved,
+  } = req.body;
   console.log("i am in registerUser at backend with data ", req.body);
   try {
     const salt = await bcrypt.genSalt(10);
@@ -42,8 +51,8 @@ const registerSuperUser=async(req,res)=>{
       userName: userName,
       emailId: emailId,
       password: hashedPassword,
-      roles:roles,
-      approved:approved,
+      roles: roles,
+      approved: approved,
     });
 
     const savedUser = await newUser.save();
@@ -51,89 +60,76 @@ const registerSuperUser=async(req,res)=>{
     if (savedUser) {
       console.log("SuperUser is already saved ", savedUser);
       res.json({
-        success:true,
-        message:`user with email id ${emailId} saved successfully`,
-      })
+        success: true,
+        message: `user with email id ${emailId} saved successfully`,
+      });
 
       return;
     }
   } catch (error) {
     console.log("error ", error.message);
     res.json({
-      success:false, 
-      message:`error is ${error.message}`
-    })
+      success: false,
+      message: `error is ${error.message}`,
+    });
     return;
   }
-  
-}
-
+};
 
 const loginUser = async (req, res) => {
-  console.log("i am in login user with data",req.body);
- 
-  const {   emailId, password,loginAs } = req.body;
+  console.log("i am in login user with data", req.body);
 
+  const { emailId, password, loginAs } = req.body;
 
-try {
-  
-    const user= await userModel.findOne({emailId:emailId });
-    
-    console.log('we found the data of user as ',user);
-    
-    if(!user)
-    {
+  try {
+    const user = await userModel.findOne({ emailId: emailId });
+
+    console.log("we found the data of user as ", user);
+
+    if (!user) {
       return res.json({
-        success:false,
-        message:'no such user exist ⚔️'
-      })
+        success: false,
+        message: "no such user exist ⚔️",
+      });
     }
-// mathing for password and role
-const isPasswordMatched=await bcrypt.compare(password,user.password);
-if(!isPasswordMatched)
-{
-  console.log('no such password exist ');
-  
-  return res.json({
-    success:false,
-    message:'no such password exist ⚔️'
-  })
-}
+    // mathing for password and role
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatched) {
+      console.log("no such password exist ");
 
-// checking for the role is matched or not ..
-const isRoleMatched=(user.roles.includes(loginAs));
-if(!isRoleMatched){
-  return res.json({
-    success:false,
-    message:'no such role exist ⚔️'
-  })
+      return res.json({
+        success: false,
+        message: "no such password exist ⚔️",
+      });
+    }
 
-}
+    // checking for the role is matched or not ..
+    const isRoleMatched = user.roles.includes(loginAs);
+    if (!isRoleMatched) {
+      return res.json({
+        success: false,
+        message: "no such role exist ⚔️",
+      });
+    }
 
-console.log('login is success with role ',user.role);
+    console.log("login is success with role ", user.role);
 
-const token=createToken(user._id,user.role);
-console.log('we created the token ',token);
+    const token = createToken(user._id, user.role);
+    console.log("we created the token ", token);
 
+    return res.json({
+      data: { userName: user.userName, role: loginAs, success: true },
+      token: token,
+      message: "successfully loged In 🫸",
+    });
 
-return res.json({
-  data:{userName:user.userName,role:loginAs,success:true,},
- 
-  token:token,
-   
-  message:'successfully loged In 🫸'
-})
-
-console.log('user found ==',user);
-
-
-} catch (error) {
-  res.json({
-    success:false,
-    message:`no such person exists🙏 ${error.message}`,
-  })
-}
-   
+    console.log("user found ==", user);
+  } catch (error) {
+    res.json({
+      success: false,
+      message: `no such person exists🙏 ${error.message}`,
+    });
+  }
 };
 
 const verifyOtp = async (req, res) => {
@@ -250,7 +246,7 @@ const getLocalIds = async (req, res) => {
       { departmentId: departmentId },
       { teachersLocalId: 1, _id: 0 }
     );
-     
+
     if (departmentLocalIds.length === 0) {
       res.json({
         success: false,
@@ -294,7 +290,7 @@ const registerUser = async (req, res) => {
       userName: userName,
       emailId: emailId,
       password: hashedPassword,
-      approved:false,
+      approved: false,
     });
 
     const savedUser = await newUser.save();
@@ -302,16 +298,14 @@ const registerUser = async (req, res) => {
     if (savedUser) {
       console.log("saved user -----🤣❤️", savedUser);
       res.json({
-        success:true,
-        message:`user with email id ${emailId} saved successfully`,
-      })
+        success: true,
+        message: `user with email id ${emailId} saved successfully`,
+      });
     }
   } catch (error) {
     console.log("error ", error.message);
   }
 };
-
-
 
 export {
   loginUser,
