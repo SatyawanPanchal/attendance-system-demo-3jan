@@ -31,8 +31,9 @@ const registerSuperUser=async(req,res)=>{
     if (alreadyExisting) {
       res.json({
         success: false,
-        message: "email already existing",
+        message: "Go for Login,SuperUser",
       });
+      return;
     }
 
     const newUser = new userModel({
@@ -53,9 +54,16 @@ const registerSuperUser=async(req,res)=>{
         success:true,
         message:`user with email id ${emailId} saved successfully`,
       })
+
+      return;
     }
   } catch (error) {
     console.log("error ", error.message);
+    res.json({
+      success:false, 
+      message:`error is ${error.message}`
+    })
+    return;
   }
   
 }

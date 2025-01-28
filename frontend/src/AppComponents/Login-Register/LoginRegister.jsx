@@ -191,8 +191,8 @@ const LoginRegister = ({ setLoginStatus }) => {
     
     const superUserRegistrationData = {
       departmentName: "developer",
-      localId: "satyawan",
-      userName: "SuperUser",
+      localId: "satyawan-001",
+      userName: "Satyawan",
       emailId: "satyawanteacher@gmail.com",
       password: "9992026088",
       roles:["SuperUser"],
@@ -204,9 +204,18 @@ const LoginRegister = ({ setLoginStatus }) => {
       try {
         const response=await axios.post(`${server_url}/api/user/registerSuperUser`,superUserRegistrationData);
         console.log('response on superuser registration',response.data);
-        alert(response.data);
+        if(response.data.success)
+        {
+
+          alert(response.data.message);
+        } 
+        else{
+          alert(response.data.message)
+        }
       } catch (error) {
-        alert(error.message);
+        console.log(`error is ${error.message}`);
+        
+        alert(`error is ${error.message}`);
         
       }
     };
